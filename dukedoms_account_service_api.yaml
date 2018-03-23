@@ -94,6 +94,22 @@ paths:
   /invitePlayers:
     post:
       summary: invite set of players to game
+      x-swagger-router-controller: controllers.gameOperations
+      operationId: invite_accounts
+      tags:
+        - gameOperations
+      parameters:
+        in: body
+        name: invitationBatch
+        type: object
+        required: true
+        schema:
+          $ref: '#/definitions/InvitationBatch'
+    responses:
+      202:
+        description: invitations successfully submitted
+      404:
+        description: at least one player not found
 
 
 definitions:
@@ -149,3 +165,12 @@ definitions:
         type: string
       playerId:
         type: integer
+  InvitationBatch:
+    type: object
+    properties:
+      gameId:
+        type: integer
+      playerList:
+        type: array
+        items:
+          type: integer
