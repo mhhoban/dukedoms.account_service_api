@@ -139,7 +139,9 @@ definitions:
       pendingPlayerIds:
         type: object
       gameInvitations:
-        type: object
+        type: array
+        items:
+          type: integer
   PlayerVerificationRequest:
     type: array
     items:
@@ -173,4 +175,4 @@ definitions:
       playerList:
         type: array
         items:
-          type: integer
+          type: string
