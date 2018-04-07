@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   title: Dukedoms of Daleria Account Service API
-  version: 0.1.0
+  version: "0.1.2"
 
 paths:
   /newAccount:
@@ -35,19 +35,19 @@ paths:
       tags:
         - accountInfo
       parameters:
-        in: path
-        name: accountId
-        type: integer
-        required: true
-        description: numeric id of player whose info to fetch
-    responses:
-      200:
-        description: Player account found successfully
-        schema:
-          $ref: '#/definitions/accountInfo'
-      404:
-        description: Player id not found
-  /getAccountIds/:
+        - in: path
+          name: accountId
+          type: integer
+          required: true
+          description: numeric id of player whose info to fetch
+      responses:
+        200:
+          description: Player account found successfully
+          schema:
+            $ref: '#/definitions/accountInfo'
+        404:
+          description: Player id not found
+  /getAccountIds:
     get:
       summary: get ids for submitted accounts
       x-swagger-router-controller: controllers.account_info
@@ -55,39 +55,37 @@ paths:
       tags:
         - accountInfo
       parameters:
-        in: body
-        name: requestedAccounts
-        type: object
-        required: true
-        schema:
-          $ref: '#/definitions/RequestAccountIds'
-    responses:
-      200:
-        description: all accounts found
-        schema:
-          $ref: '#/definitions/AccountIdMappings'
-      404:
-        description: at least one provided account not found
-
-    /verifyAccounts:
-      get:
-        summary: determine if a list of accountIds exist in the system
-        x-swagger-router-controller: controllers.account_info
-        operationId: verify_accounts
-        tags:
-          - accountInfo
-        parameters:
-          in: body
-          name: playerList
-          type: object
+        - in: query
+          name: requestedAccounts
+          type: array
+          items:
+            type: string
           required: true
-          schema:
-            $ref: '#/definitions/PlayerVerificationRequest'
       responses:
         200:
-          description: Players all exist
+          description: all accounts found
+          schema:
+            $ref: '#/definitions/AccountIdMappings'
         404:
-          description: not all players exist
+          description: at least one provided account not found
+
+  /verifyAccounts:
+    get:
+      summary: determine if a list of accountIds exist in the system
+      x-swagger-router-controller: controllers.account_info
+      operationId: verify_accounts
+      tags:
+        - accountInfo
+      parameters:
+        - in: query
+          name: playerList
+          type: array
+          items:
+            type: string
+          required: true
+      responses:
+        200:
+          description: successful
           schema:
             $ref: '#/definitions/UnverifiedPlayers'
 
@@ -98,18 +96,20 @@ paths:
       operationId: invite_accounts
       tags:
         - gameOperations
+      consumes:
+        - application/json
+      produces:
+        - application/json
       parameters:
-        in: body
-        name: invitationBatch
-        type: object
-        required: true
-        schema:
-          $ref: '#/definitions/InvitationBatch'
-    responses:
-      202:
-        description: invitations successfully submitted
-      404:
-        description: at least one player not found
+        - in: body
+          name: invitationBatch
+          schema:
+            $ref: '#/definitions/InvitationBatch'
+      responses:
+        202:
+          description: invitations successfully submitted
+        404:
+          description: at least one player not found
 
 
 definitions:
@@ -142,31 +142,20 @@ definitions:
         type: array
         items:
           type: integer
-  PlayerVerificationRequest:
-    type: array
-    items:
-      type: string
   UnverifiedPlayers:
-    type: array
-    items:
-      type: string
-  RequestAccountIds:
-    type: array
-    items:
-      type: string
-  AccountIdMappings:
-    type: array
-    items:
-      type: object
-      schema:
-        $ref: '#/definitions/AccountIdMapping'
-  AccountIdMapping:
     type: object
     properties:
-      playerEmail:
-        type: string
-      playerId:
-        type: integer
+      UnverifiedPlayers:
+        type: array
+        items:
+          type: string
+  AccountIdMappings:
+    type: object
+    properties:
+      accountIdMappings:
+        type: array
+        items:
+          type: object
   InvitationBatch:
     type: object
     properties:
