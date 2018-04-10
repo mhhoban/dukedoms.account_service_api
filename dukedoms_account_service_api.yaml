@@ -27,7 +27,7 @@ paths:
           schema:
             $ref: '#/definitions/NewAccountRequestSuccessful'
 
-  /getAccountInfo/{accountId}:
+  /getAccountInfo/{accountIds}:
     get:
       summary: get all information for given playerId
       x-swagger-router-controller: controllers.account_info
@@ -36,17 +36,21 @@ paths:
         - accountInfo
       parameters:
         - in: path
-          name: accountId
-          type: integer
+          name: accountIds
+          type: array
+          items:
+            type: integer
           required: true
-          description: numeric id of player whose info to fetch
+          description: numeric ids of players whose info to fetch
       responses:
         200:
-          description: Player account found successfully
+          description: Player accounts found successfully
           schema:
-            $ref: '#/definitions/accountInfo'
+            type: array
+            items:
+              - $ref: '#/definitions/AccountInfo'
         404:
-          description: Player id not found
+          description: at least one player id not found
   /getAccountIds:
     get:
       summary: get ids for submitted accounts
@@ -111,7 +115,6 @@ paths:
         404:
           description: at least one player not found
 
-
 definitions:
   NewAccountRequest:
     type: object
@@ -127,7 +130,7 @@ definitions:
         type: string
       accountId:
         type: integer
-  accountInfo:
+  AccountInfo:
     type: object
     properties:
       email:
