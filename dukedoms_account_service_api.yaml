@@ -34,6 +34,8 @@ paths:
       operationId: get_player_info
       tags:
         - accountInfo
+      produces:
+        - application/json
       parameters:
         - in: path
           name: accountIds
@@ -46,9 +48,7 @@ paths:
         200:
           description: Player accounts found successfully
           schema:
-            type: array
-            items:
-              - $ref: '#/definitions/AccountInfo'
+            $ref: '#/definitions/AccountInfoList'
         404:
           description: at least one player id not found
   /getAccountIds:
@@ -130,21 +130,26 @@ definitions:
         type: string
       accountId:
         type: integer
-  AccountInfo:
+  AccountInfoList:
     type: object
     properties:
-      email:
-        type: string
-      accountId:
-        type: integer
-      activePlayerIds:
-        type: object
-      pendingPlayerIds:
-        type: object
-      gameInvitations:
+      playerAccounts:
         type: array
         items:
-          type: integer
+          type: object
+          properties:
+            email:
+              type: string
+            accountId:
+              type: integer
+            activePlayerIds:
+              type: object
+            pendingPlayerIds:
+              type: object
+            gameInvitations:
+              type: array
+              items:
+                type: integer
   UnverifiedPlayers:
     type: object
     properties:
