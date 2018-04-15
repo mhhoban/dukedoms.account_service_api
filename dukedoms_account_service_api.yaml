@@ -96,7 +96,7 @@ paths:
   /invitePlayers:
     post:
       summary: invite set of players to game
-      x-swagger-router-controller: controllers.gameOperations
+      x-swagger-router-controller: controllers.game_operations
       operationId: invite_accounts
       tags:
         - gameOperations
