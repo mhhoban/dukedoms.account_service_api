@@ -72,6 +72,25 @@ paths:
             $ref: '#/definitions/AccountIdMappings'
         404:
           description: at least one provided account not found
+  /getGameInvites/{accountId}:
+    get:
+      summary: get games to which a player has been invited but not accepted or declined
+      x-swagger-router-controller: controllers.account_info
+      operationId: get_game_invites
+      produces:
+        - application/json
+      tags:
+        - accountInfo
+      parameters:
+        - in: path
+          name: accountId
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Ok
+          schema:
+            $ref: '#/definitions/GameInvites'
 
   /verifyAccounts:
     get:
@@ -173,3 +192,10 @@ definitions:
         type: array
         items:
           type: string
+  GameInvites:
+    type: object
+    properties:
+      gameIds:
+        type: array
+        items:
+          type: integer
