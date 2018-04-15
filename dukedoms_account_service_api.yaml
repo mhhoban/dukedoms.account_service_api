@@ -91,7 +91,6 @@ paths:
           description: Ok
           schema:
             $ref: '#/definitions/GameInvites'
-
   /verifyAccounts:
     get:
       summary: determine if a list of accountIds exist in the system
@@ -133,8 +132,34 @@ paths:
           description: invitations successfully submitted
         404:
           description: at least one player not found
+  /processInvite:
+    post:
+      summary: Accept/Decline a game invitation
+      x-swagger-router-controller: controllers.game_operations
+      operationId: process_game_invite
+      tags:
+        - gameOperations
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: invitationResponse
+          schema:
+            $ref: '#/definitions/InvitationResponse'
+      responses:
+        202:
+          description: Invitation response successfully submitted
 
 definitions:
+  InvitationResponse:
+    type: object
+    properties:
+      accountId:
+        type: integer
+      gameId:
+        type: integer
+      accept:
+        type: boolean
   NewAccountRequest:
     type: object
     properties:
